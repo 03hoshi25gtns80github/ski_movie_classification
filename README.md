@@ -1,3 +1,4 @@
+# スキーの映像のrenameをAIの予測で行う
 ## .py  
 ### get_mels
 input:movieフォルダ内のすべてのファイル  
@@ -23,4 +24,23 @@ process:ファイルrename
 モデル定義  
 create_modelのreturnをコメントアウトしてモデル選択  
 ### tekitou  
-お試し用
+お試し用  
+
+## フォルダ構成  
+siwake/
+├── augment/ # 水増しメルスペクトラム
+├── dataset/ # データセットcsv
+├── first_model/ # BERTモデルの完成版
+├── mels/ # メルスペクトログラム画像
+├── misc/ # 使わないmels
+├── model/ # トレーニング済みモデル
+├── movie/ # 学習用動画
+├── src/ # ソースコード
+├── test/ # テスト動画
+├── wav/ # 音声ファイル
+├── .gitignore
+├── docker-compose.yml
+├── Dockerfile
+├── README.md
+└── requirements.txt
+
