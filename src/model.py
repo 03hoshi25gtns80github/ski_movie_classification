@@ -19,7 +19,8 @@ class CustomConvNeXt(nn.Module):
         # 事前学習済みのConvNeXtモデルをロード
         self.model = timm.create_model('convnext_base', pretrained=True)
         # 最後の全結合層を置き換え
-        self.model.head = nn.Linear(self.model.head.in_features, num_classes)
+        in_features = self.model.get_classifier().in_features  # 正しい入力次元を取得
+        self.model.reset_classifier(num_classes)  # クラス数に応じて分類器をリセット
 
     def forward(self, x):
         return self.model(x)

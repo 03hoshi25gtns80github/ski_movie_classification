@@ -6,3 +6,5 @@ model/
 movie
 test/
 wav/
+*.pyc
+__pycache__/
