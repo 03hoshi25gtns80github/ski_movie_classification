@@ -2,7 +2,7 @@ from train import train
 
 if __name__ == "__main__":
     batch_size = 32
-    epochs = 2
+    epochs = 10
     out_dim = 128
     temperature = 0.5
     learning_rate = 3e-4

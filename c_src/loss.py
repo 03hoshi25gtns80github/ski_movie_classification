@@ -14,16 +14,8 @@ class NTXentLoss(nn.Module):
         z = torch.cat((z_i, z_j), dim=0)
         sim = self.similarity_f(z.unsqueeze(1), z.unsqueeze(0)) / self.temperature
         
-        # デバッグプリントを追加
-        print(f"sim shape: {sim.shape}")
-        print(f"batch_size: {self.batch_size}")
-        
         sim_i_j = torch.diag(sim, self.batch_size)
         sim_j_i = torch.diag(sim, -self.batch_size)
-        
-        # デバッグプリントを追加
-        print(f"sim_i_j shape: {sim_i_j.shape}")
-        print(f"sim_j_i shape: {sim_j_i.shape}")
         
         positives = torch.cat((sim_i_j, sim_j_i), dim=0).view(N, 1)
         mask = torch.eye(N, dtype=bool).to(sim.device)

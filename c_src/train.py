@@ -27,10 +27,6 @@ def train(root_dir, batch_size, epochs, out_dim, temperature, learning_rate):
             z_i = model(x_i)
             z_j = model(x_j)
             
-            # デバッグプリントを追加
-            print(f"z_i shape: {z_i.shape}")
-            print(f"z_j shape: {z_j.shape}")
-
             loss = criterion(z_i, z_j)
             optimizer.zero_grad()
             loss.backward()
@@ -39,6 +35,13 @@ def train(root_dir, batch_size, epochs, out_dim, temperature, learning_rate):
         avg_loss = total_loss / len(train_loader)
         loss_history.append(avg_loss)
         print(f"Epoch [{epoch+1}/{epochs}], Loss: {avg_loss}")
+
+    # エンコーダの保存
+    save_dir = os.path.join(os.path.dirname(__file__), '../SimCLR')
+    os.makedirs(save_dir, exist_ok=True)
+    encoder_path = os.path.join(save_dir, 'SimCLR_encoder.pth')
+    torch.save(model.state_dict(), encoder_path)
+    print(f"Encoder saved to {encoder_path}")
 
     # 学習過程の可視化
     plt.figure(figsize=(10, 5))
