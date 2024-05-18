@@ -1,0 +1,8 @@
+moviepy
+librosa
+matplotlib
+torch
+torchvision
+Pillow
+pandas
+timm
