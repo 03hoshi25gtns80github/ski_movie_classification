@@ -1,8 +1,8 @@
 # ベースイメージとしてPython 3.11を使用
-FROM python:3.10 AS base
+FROM python:3.11 AS base
 
-# NVIDIAのCUDAベースイメージを使用
-FROM nvidia/cuda:11.6.2-cudnn8-runtime-ubuntu20.04
+# NVIDIAの最新CUDAベースイメージを使用
+FROM nvidia/cuda:12.0.0-cudnn8-runtime-ubuntu22.04
 
 # 必要なパッケージをインストール
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Pythonとpipをインストール
 COPY --from=base /usr/local/bin/python /usr/local/bin/python
-COPY --from=base /usr/local/lib/python3.10 /usr/local/lib/python3.10
-COPY --from=base /usr/local/lib/libpython3.10.so.1.0 /usr/local/lib/libpython3.10.so.1.0
+COPY --from=base /usr/local/lib/python3.11 /usr/local/lib/python3.11
+COPY --from=base /usr/local/lib/libpython3.11.so.1.0 /usr/local/lib/libpython3.11.so.1.0
 
 # LD_LIBRARY_PATHを設定
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
