@@ -1,6 +1,9 @@
 # ベースイメージとしてPython 3.11を使用
 FROM python:3.11
 
+# NVIDIAのCUDAベースイメージを使用
+FROM nvidia/cuda:11.7.1-cudnn8-runtime-ubuntu20.04
+
 # 作業ディレクトリを設定
 WORKDIR /app
 

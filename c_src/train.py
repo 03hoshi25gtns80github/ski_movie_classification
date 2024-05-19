@@ -8,6 +8,7 @@ from loss import NTXentLoss
 
 def train(root_dir, batch_size, epochs, out_dim, temperature, learning_rate):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"Using device: {device}")  # GPUを使用しているかどうかを表示
     train_loader = get_data_loader(root_dir, batch_size)  # drop_last=Trueを追加
     model = get_model(out_dim).to(device)
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
@@ -37,7 +38,7 @@ def train(root_dir, batch_size, epochs, out_dim, temperature, learning_rate):
         print(f"Epoch [{epoch+1}/{epochs}], Loss: {avg_loss}")
 
         # 10エポックごとにエンコーダを保存
-        if (epoch + 1) % 10 == 0:
+        if (epoch + 1) % 2 == 0:
             save_dir = os.path.join(os.path.dirname(__file__), '../SimCLR')
             os.makedirs(save_dir, exist_ok=True)
             encoder_path = os.path.join(save_dir, f'SimCLR_encoder_bs{batch_size}_od{out_dim}_temp{temperature}_lr{learning_rate}_epoch{epoch+1}.pth')

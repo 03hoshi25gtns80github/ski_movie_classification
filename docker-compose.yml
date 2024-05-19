@@ -6,3 +6,8 @@ services:
     volumes:
       - .:/app
     tty: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
