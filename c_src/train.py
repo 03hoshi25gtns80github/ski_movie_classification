@@ -36,12 +36,13 @@ def train(root_dir, batch_size, epochs, out_dim, temperature, learning_rate):
         loss_history.append(avg_loss)
         print(f"Epoch [{epoch+1}/{epochs}], Loss: {avg_loss}")
 
-    # エンコーダの保存
-    save_dir = os.path.join(os.path.dirname(__file__), '../SimCLR')
-    os.makedirs(save_dir, exist_ok=True)
-    encoder_path = os.path.join(save_dir, 'SimCLR_encoder.pth')
-    torch.save(model.state_dict(), encoder_path)
-    print(f"Encoder saved to {encoder_path}")
+        # 10エポックごとにエンコーダを保存
+        if (epoch + 1) % 10 == 0:
+            save_dir = os.path.join(os.path.dirname(__file__), '../SimCLR')
+            os.makedirs(save_dir, exist_ok=True)
+            encoder_path = os.path.join(save_dir, f'SimCLR_encoder_bs{batch_size}_od{out_dim}_temp{temperature}_lr{learning_rate}_epoch{epoch+1}.pth')
+            torch.save(model.state_dict(), encoder_path)
+            print(f"Encoder saved to {encoder_path}")
 
     # 学習過程の可視化
     plt.figure(figsize=(10, 5))
@@ -53,6 +54,6 @@ def train(root_dir, batch_size, epochs, out_dim, temperature, learning_rate):
     
     # スクリプトと同じフォルダに保存
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    plot_path = os.path.join(script_dir, 'training_loss.png')
+    plot_path = os.path.join(script_dir, f'training_loss_bs{batch_size}_od{out_dim}_temp{temperature}_lr{learning_rate}.png')
     plt.savefig(plot_path)
     plt.show()

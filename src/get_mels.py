@@ -23,7 +23,12 @@ def convert_mts_to_wav(input_folder, output_folder):
             # 動画ファイルを読み込み
             video = VideoFileClip(input_path)
             
-            # 最初の7秒の音声を抽出
+            # 動画の長さを確認
+            if video.duration < 5:
+                print(f"Skipped {input_path} because it is shorter than 5 seconds")
+                continue
+            
+            # 最初の5秒の音声を抽出
             audio = video.audio.subclip(0, 5)
             
             # 音声を.wavファイルとして保存
@@ -83,4 +88,5 @@ def main():
     clear_folder(wav_folder)
 
 if __name__ == "__main__":
+    main()
     main()
