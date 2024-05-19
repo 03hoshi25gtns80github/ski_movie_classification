@@ -7,10 +7,12 @@ from torchvision import transforms
 from train import get_model
 from dataset import MelSpectrogramDataset
 from utils import convert_mts_to_wav, convert_audio_to_melspectrogram
+from pyclustering.cluster.xmeans import xmeans, kmeans_plusplus_initializer
+from pyclustering.cluster.center_initializer import random_center_initializer
 
 # エンコーダの読み込み
 save_dir = '../SimCLR'
-encoder_path = os.path.join(save_dir, 'SimCLR_encoder.pth')
+encoder_path = os.path.join(save_dir, 'SimCLR_encoder_bs32_od128_temp0.5_lr0.0003_epoch4.pth')
 model = get_model(out_dim=128)
 model.load_state_dict(torch.load(encoder_path))
 model.eval()
@@ -61,10 +63,21 @@ with torch.no_grad():
 
 embeddings = torch.cat(embeddings).numpy()
 
-# クラスタリング
-kmeans = KMeans(n_clusters=4)
-kmeans.fit(embeddings)
-labels = kmeans.labels_
+# X-meansクラスタリング
+# ハイパーパラメータの設定
+min_clusters = 2
+max_clusters = 8
+
+# 初期クラスタの設定
+initial_centers = kmeans_plusplus_initializer(embeddings, min_clusters).initialize()
+xmeans_instance = xmeans(embeddings, initial_centers, max_clusters)
+xmeans_instance.process()
+clusters = xmeans_instance.get_clusters()
+labels = [0] * len(embeddings)
+
+for cluster_id, cluster in enumerate(clusters):
+    for index in cluster:
+        labels[index] = cluster_id
 
 # クラスタリング結果をメタデータに追加
 df['cluster'] = 0  # 初期化
